@@ -1,17 +1,19 @@
-var item = [];
+﻿var item = [];
 var newitem = "";
 var editval = "";
 const ENTER = 13;
 const SPACEBAR = 32;
+var  i = 0;
+var $ = document.querySelector.bind(document);
 
 function befinished(event) {
 	// 	Event.target.cl= "item_finished";
 	// 	Event.target.innerHTML += "已完成";
 	var flag = event.target.getAttribute("name");
-	if (flag == "false") {
+	if (flag === "false") {
 		event.target.setAttribute("class", "item_finished");
 		event.target.setAttribute("name", true);
-	} else {
+	} else if (flag === "true"){
 		event.target.setAttribute("class", "item_todo");
 		event.target.setAttribute("name", false);
 	}
@@ -19,18 +21,16 @@ function befinished(event) {
 }
 
 function itemchange(event) {
-	var li_id = event.target.getAttribute("id");
-	var li = document.getElementById(li_id);
-	// li.setAttribute("style", "display:block");
-	var val = li.innerText;
-	var tempitem = document.createElement("input");
-	tempitem.setAttribute("id", "item_change");
-	tempitem.setAttribute("type", "text");
-	tempitem.setAttribute("value", val);
-	tempitem.onkeydown = edititems;
-	li.appendChild(tempitem);
-	item[li.value] = editval;
-	li.innerText = editval;
+	let li=event.target;
+	let str=li.innerText;
+	li.innerHTML="<input />";
+	li.querySelector("input").setAttribute("value", str);
+	li.querySelector("input").setAttribute("name", "item_input");
+	li.querySelector("input").addEventListener("keydown",e=>{
+		if(e.code==="Enter"){
+			li.innerHTML=li.querySelector("input").value;
+		}
+	});
 }
 
 function edititems(event) {
@@ -42,50 +42,77 @@ function edititems(event) {
 	}
 }
 
-function toitems() {
-	var items = document.getElementById("item")
-	var tempitem = document.createElement("li");
+function toitems(todovalue) {
+	let tempitem = document.createElement("li");
 	tempitem.setAttribute("class", "item_todo");
-	tempitem.setAttribute("id", "items" + item.length);
+	tempitem.setAttribute("id", "items" + i);
 	tempitem.setAttribute("name", "false");
 	tempitem.setAttribute("style", "display:block");
 	tempitem.onclick = befinished;
 	tempitem.ondblclick = itemchange;
 	//	tempitem.addEventListener('click', befinished, false);
-	tempitem.innerHTML = newitem;
+	tempitem.innerHTML = todovalue;
 	document.getElementById("item").appendChild(tempitem);
-	var del = document.createElement("button");
-	del.setAttribute("id", "del"+ item.length);
-	var t = document.createTextNode("DELETE");
-	del.appendChild(t);	
+	let del = document.createElement("button");
+	del.setAttribute("id", "del"+ i);
+	let t = document.createTextNode("DELETE");
+	del.appendChild(t);
 	del.onclick = delitems;
 	document.getElementById("item").appendChild(del);
+	i++;
 }
 function delitems (event){
-	
+	// event.target.previousElementSibling.remove();
+	let el = event.target.previousElementSibling;
+	let p = event.target.parentElement;
+	p.removeChild(el);
+	p.removeChild(event.target);
+	// event.target.remove();
+
 }
 
 function btn_additems() {
 	newitem = document.getElementById("input").value;
-	item.push(newitem);
-	toitems();
+	toitems(newitem);
 	document.getElementById("input").value = "";
+
 }
 
 function additems() {
 	var e = event.keyCode;
 	if (e == ENTER || e == SPACEBAR) {
-		newitem = document.getElementById("input").value;
-		item.push(newitem);
-		toitems();
-		document.getElementById("input").value = "";
+		btn_additems();
 	}
 }
 
-function saveData(type, item) {
-	window.localStorage.setItem(type, JSON.stringify(item));
+function saveData(type,item) {
+	window.localStorage.setItem(type, JSON.stringify(item).toString());
 }
 
 function getData(type) {
 	return JSON.parse(localStorage.getItem(type));
+}
+
+function save() {
+	window.localStorage.clear();
+	let item = [];
+	let todo = $("item");
+	var todolist = document.querySelectorAll("li");
+	let length = todolist.length;
+	for (let i = 0;i < length; i ++)
+	{
+		  item[i] = todolist[i].innerHTML;
+	}
+	window.localStorage.setItem("type", JSON.stringify(item));
+}
+function paint() {
+
+	item =getData("type");
+	if( item.length !== 0)
+	{
+		for(let i = 0; i < item.length; i ++)
+		{
+			toitems(item[i]);
+		}
+	}
 }

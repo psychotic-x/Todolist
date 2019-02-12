@@ -1,6 +1,9 @@
 .item_todo{
-	
+	text-decoration: none;
 }
 .item_finished{
 	text-decoration: line-through;
+}
+.item_input{
+	text-decoration: none;
 }
