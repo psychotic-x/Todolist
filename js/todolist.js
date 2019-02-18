@@ -34,8 +34,8 @@ function itemchange(event) {
 }
 
 function edititems(event) {
-	var e = event.keyCode;
-	if (e == ENTER || e == SPACEBAR) {
+	var e = event.code;
+	if (e == "ENTER" || e == "SPACEBAR") {
 		var changebtn = document.getElementById("item_change");
 		editval = changebtn.value;
 		// changebtn.setAttribute("style", "display:none");
@@ -86,15 +86,15 @@ function additems() {
 }
 
 function saveData(type,item) {
-	window.localStorage.setItem(type, JSON.stringify(item).toString());
+	window.sessionStorage.setItem(type, JSON.stringify(item).toString());
 }
 
 function getData(type) {
-	return JSON.parse(localStorage.getItem(type));
+	return JSON.parse(sessionStorage.getItem(type));
 }
 
 function save() {
-	window.localStorage.clear();
+	window.sessionStorage.clear();
 	let item = [];
 	let todo = $("item");
 	var todolist = document.querySelectorAll("li");
@@ -103,7 +103,7 @@ function save() {
 	{
 		  item[i] = todolist[i].innerHTML;
 	}
-	window.localStorage.setItem("type", JSON.stringify(item));
+	window.sessionStorage.setItem("type", JSON.stringify(item));
 }
 function paint() {
 

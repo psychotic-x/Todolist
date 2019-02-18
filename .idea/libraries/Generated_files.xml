@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/ts/learning.js" />
+        <item url="file://$PROJECT_DIR$/ts/todo.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/ts/learning.js" />
+      <root url="file://$PROJECT_DIR$/ts/todo.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>
