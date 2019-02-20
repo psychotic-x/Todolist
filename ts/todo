@@ -2,8 +2,8 @@ class todoitem{
     name : string;
     isdone : boolean;
     isdelete : boolean;
-    constructor(name:string){
-        this.name = name;
+    constructor(name?:string){
+        this.name = name|| "";
         this.isdone = false;
         this.isdelete = false;
     }
@@ -51,17 +51,19 @@ class todolist {
     }
 
 }
+let toDoList = new todolist();
 
 let ul = document.querySelector("ul");
 let data = document.querySelector("input");
 let btn = document.querySelector("button");
 
-function clickAddItem (){
+function clickAddItem (event){
     let ul = document.querySelector("ul");
     let todoitem = document.createElement("li");
     let isfinished = document.createElement("input");
     let todovalue = document.createElement("span");
     let isdelete = document.createElement("i");
+    todovalue.innerText = event.target.innerText.
     isdelete.innerText = "×";
     isfinished.innerText = "删除";
     isfinished.setAttribute("type","checkbox");
@@ -73,9 +75,9 @@ function clickAddItem (){
 }
 
 function keyupAddItem(event) {
-    let e = event.code;
+    let e = event.key;
     if (e == "ENTER" || e == "SPACEBAR") {
-        clickAddItem();
+        clickAddItem(event);
     }
 
 }
@@ -107,12 +109,29 @@ function eventDelegate  (parentSelector, targetSelector, events, foo) {
         }
     }
 }
-function editItem (){}
+function editItem (event){
+    if(event.target.nodeName.toLocaleLowerCase === 'li')
+    {
+        let item = event.target;
+        let parentItem = item.parentElement;
+        item.innerHTML = "<input />";
+        if(event.code==="Enter"){
+            item.innerHTML=parentItem.querySelector("input").value;
+        }
+    }
+
+}
 function beFinished(){}
 function deleteItem(){}
 function initItem(){}
-function saveItems(){}
+function saveToDoList(ToDoList,toDoList){
+    window.localStorage.setItem(ToDoList, JSON.stringify(todolist).toString());
+}
+function getToDoList(ToDoList){
+    return JSON.parse(localStorage.getItem(ToDoList));
+}
 window.onload = function init() {
+    toDoList = getToDoList("ToDoList");
     initItem();
     eventDelegate("ul","li","click", "editItem");
     eventDelegate("ul","li","click", "beFinished");
@@ -120,7 +139,7 @@ window.onload = function init() {
 }
 
 window.onbeforeunload = function fashPage(){
-    saveItems();
+    saveToDoList("ToDoList",toDoList);
 }
 
 
